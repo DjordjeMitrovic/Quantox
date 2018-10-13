@@ -14,7 +14,10 @@ router.get('/', function (req, res, next) {
 });
 router.get("/login", function (req, res) {
     if (req.session.user) {
-        res.redirect('/');
+        res.render('pages/mainPage/mainPage.ejs', {
+            root: appDir,
+            user: req.session.user
+        });
     } else {
         res.render('pages/login/login.ejs', {
             root: appDir
@@ -28,8 +31,8 @@ router.get("/register", function (req, res) {
     userinfo["username"] = "";
     userinfo["password"] = "";
     userinfo["email"] = "";
-    res.render('pages/register/register.ejs', {   
-        user: userinfo,    
+    res.render('pages/register/register.ejs', {
+        user: userinfo,
         root: appDir
     });
 });

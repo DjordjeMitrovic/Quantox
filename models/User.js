@@ -55,7 +55,7 @@ module.exports = class users {
             connection.query("insert into users(firstName,lastName,username,password,email) values(?, ?, ?, ?, ?)", user,
 
                 function (error, results) {
-                    if(error) {
+                    if (error) {
                         console.log(error);
                     }
                     connection.end();
@@ -65,6 +65,28 @@ module.exports = class users {
 
         });
 
+
+
+    }
+
+    auth(username) {
+        var connection = this.db.getConnection();
+        return new Promise(function (resolve, reject) {
+
+            connection.connect();
+
+            connection.query("update users set `activated` =  1 where username = ?", username,
+
+                function (error, results) {
+                    if (error) {
+                        console.log(error);
+                    }
+                    connection.end();
+
+                    resolve(results);
+                });
+
+        });
 
 
     }

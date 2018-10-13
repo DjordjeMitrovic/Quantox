@@ -17,6 +17,7 @@
     "express-session": "^1.15.6",
     "node-mysql": "^0.4.2",
     "node-sha1": "^1.0.1",
+    "nodemailer": "^4.6.8",
     "sha1": "^1.1.1"
   }
 }

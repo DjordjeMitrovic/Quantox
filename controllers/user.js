@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-
+const nodemailer = require('nodemailer');
 const sha1 = require('sha1');
 
 const path = require('path');
@@ -8,7 +8,19 @@ const appDir = path.dirname(require.main.filename);
 
 var userModel = require(path.join(appDir, "/models/User.js"));
 var user = new userModel();
-
+var smtpTransport = nodemailer.createTransport({
+    service: 'gmail',
+    host: 'smtp.gmail.com',
+    port: 25,
+    auth: {
+        user: 'plantechHF@gmail.com',
+        pass: 'highfiveteam',
+    },
+    tls: {
+        rejectUnauthorized: false
+    },
+    debug: true
+});
 
 
 router.get("/logout", function (req, res) {
@@ -40,7 +52,7 @@ router.post("/register", function (req, res) {
     userinfo["username"] = req.body.username;
     userinfo["password"] = sha1(req.body.pass1);
     userinfo["email"] = req.body.email;
-    
+
     if (req.body.pass1 != req.body.pass2) {
         res.render("pages/register/register.ejs", {
             code: 400,
@@ -58,10 +70,25 @@ router.post("/register", function (req, res) {
                     user: userinfo
                 });
             } else {
-                    user.insert(userinfo).then(function(result){
-                        console.log(result);
-                        res.redirect("/login");
+                userdata = [];
+                for (var key in userinfo) {
+                    userdata.push(userinfo[key]);
+                }
+                user.insert(userdata).then(function (result) {
+                    var mailOptions = {
+                        from: 'plantechHF@gmail.com',
+                        to: userinfo["email"],
+                        subject: 'Authentification',
+                        text: "http://localhost:3000/user/auth/" + userinfo["username"]
+                    }
+                    console.log(mailOptions);
+                    smtpTransport.sendMail(mailOptions, function (error, response) {
+                        console.log(error);
+
+
                     });
+                    res.redirect("/login");
+                });
 
             }
         });
@@ -71,6 +98,14 @@ router.post("/register", function (req, res) {
 
 
 
+
+});
+
+
+router.get("/auth/:username", function (req, res) {
+    user.auth(req.params.username).then(function (result) {
+        res.redirect("/login");
+    });
 
 });
 
