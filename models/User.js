@@ -14,13 +14,53 @@ module.exports = class users {
         return new Promise(function (resolve, reject) {
 
             connection.connect();
-            console.log("a");
+
             connection.query("select * from users where username = ? and password=?",
                 [username, sha1(password)],
                 function (error, results) {
                     connection.end();
-                    console.log("b");
-                    resolve(results.length > 0);
+
+                    resolve(results);
+                });
+
+        });
+
+
+
+    }
+
+    checkIfUnique(username, email) {
+        var connection = this.db.getConnection();
+        return new Promise(function (resolve, reject) {
+
+            connection.connect();
+
+            connection.query("select * from users where username = ? or email=?",
+                [username, email],
+                function (error, results) {
+                    connection.end();
+
+                    resolve(results);
+                });
+
+        });
+    }
+
+    insert(user) {
+        var connection = this.db.getConnection();
+        return new Promise(function (resolve, reject) {
+
+            connection.connect();
+
+            connection.query("insert into users(firstName,lastName,username,password,email) values(?, ?, ?, ?, ?)", user,
+
+                function (error, results) {
+                    if(error) {
+                        console.log(error);
+                    }
+                    connection.end();
+
+                    resolve(results);
                 });
 
         });
@@ -30,4 +70,4 @@ module.exports = class users {
     }
 
 
-} 
+}
