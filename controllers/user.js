@@ -35,7 +35,9 @@ router.post("/login", function (req, res) {
             req.session.user = result[0];
             res.redirect('/');
         } else {
-            res.send("greska");
+            res.render("pages/login/login.ejs",{
+                message: "bad username or password"
+            });
         }
     });
 
