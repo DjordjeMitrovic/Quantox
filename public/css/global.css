@@ -1,4 +1,22 @@
 #main {
-    min-height: 1000px;
+ 
     padding-top: 30px;
+    min-height: 1000px;
+}
+.btn-secondary{
+    background-color: white;
+    color: gray;
+}
+
+.btn-secondary:hover{
+    background-color: white;
+    color: gray;
+}
+.btn-secondary:focus{
+    background-color: white;
+    color: gray;
+}
+.btn-secondary:active{
+    background-color: white;
+    color: gray;
 }

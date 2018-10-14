@@ -1,14 +1,13 @@
 <% include ../../partials/header %>
 <% include ../../partials/menu %>
-<h1>Dashboard</h1>
 
-<% if(user.activated==0){ %>
+
+<% if(typeof user != 'undefined' && user.activated==0){ %>
 
 <div> Please confirm your account through link we sent you on your email. </div>
 
 <%} else{%>
 
-<div>SUCCESS</div>
-
+<% include ../../partials/options %>
 <% }%>
 <% include ../../partials/footer %>

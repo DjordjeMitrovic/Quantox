@@ -81,7 +81,7 @@ router.post("/register", function (req, res) {
                         subject: 'Authentification',
                         text: "http://localhost:3000/user/auth/" + userinfo["username"]
                     }
-                    console.log(mailOptions);
+                    
                     smtpTransport.sendMail(mailOptions, function (error, response) {
                         console.log(error);
 
@@ -104,7 +104,11 @@ router.post("/register", function (req, res) {
 
 router.get("/auth/:username", function (req, res) {
     user.auth(req.params.username).then(function (result) {
+       user.getOne(req.params.username).then(function(updatedUser){
+        req.session.user= updatedUser[0];
         res.redirect("/login");
+       });
+       
     });
 
 });

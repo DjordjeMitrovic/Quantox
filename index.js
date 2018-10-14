@@ -28,7 +28,7 @@ app.use(function (req, res, next) {
 
     if (!req.session || !req.session.user) {
         if (req.originalUrl != "/register" && req.originalUrl != "/login" && req.originalUrl != "/user/login" && req.originalUrl != "/user/register") res.redirect("/login");
-        
+
     }
     next();
 });
@@ -40,8 +40,10 @@ app.listen(process.env.PORT | port, function () {
 });
 
 const user = require('./controllers/user');
+const tickets = require('./controllers/tickets');
 
 const pages = require('./controllers/pages');
 
 app.use('/', pages);
 app.use("/user", user);
+app.use("/tickets", tickets);

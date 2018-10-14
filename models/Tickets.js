@@ -1,58 +1,19 @@
-var sha1 = require('sha1');
 const path = require('path');
 const appDir = path.dirname(require.main.filename);
 var dataBase = require(path.join(appDir, "/db/db.js"));
-module.exports = class users {
+module.exports = class tickets {
 
     constructor() {
         this.db = new dataBase();
 
     }
-
-    checkIfUserExists(username, password) {
+    getOne(id) {
         var connection = this.db.getConnection();
         return new Promise(function (resolve, reject) {
 
             connection.connect();
 
-            connection.query("select * from users where username = ? and password=?",
-                [username, sha1(password)],
-                function (error, results) {
-                    connection.end();
-
-                    resolve(results);
-                });
-
-        });
-
-
-
-    }
-
-    checkIfUnique(username, email) {
-        var connection = this.db.getConnection();
-        return new Promise(function (resolve, reject) {
-
-            connection.connect();
-
-            connection.query("select * from users where username = ? or email=?",
-                [username, email],
-                function (error, results) {
-                    connection.end();
-
-                    resolve(results);
-                });
-
-        });
-    }
-
-    insert(user) {
-        var connection = this.db.getConnection();
-        return new Promise(function (resolve, reject) {
-
-            connection.connect();
-
-            connection.query("insert into users(firstName,lastName,username,password,email) values(?, ?, ?, ?, ?)", user,
+            connection.query("select * from tickets where id = ? and archived=0", id,
 
                 function (error, results) {
                     if (error) {
@@ -64,31 +25,6 @@ module.exports = class users {
                 });
 
         });
-
-
-
-    }
-
-    auth(username) {
-        var connection = this.db.getConnection();
-        return new Promise(function (resolve, reject) {
-
-            connection.connect();
-
-            connection.query("update users set `activated` =  1 where username = ?", username,
-
-                function (error, results) {
-                    if (error) {
-                        console.log(error);
-                    }
-                    connection.end();
-                  
-                    resolve(results);
-                });
-
-        });
-
-
     }
 
     getAll() {
@@ -97,7 +33,7 @@ module.exports = class users {
 
             connection.connect();
 
-            connection.query("select * from users",
+            connection.query("(select t.id,u2.username as 'assignedTo', title,content,u.username as 'creator', s.name as 'status' from tickets t left join status s on t.status=s.id left join users u on u.id=t.creator left join users u2 on u2.id = t.assignedTo where t.archived=0) ",
 
                 function (error, results) {
                     if (error) {
@@ -110,13 +46,35 @@ module.exports = class users {
 
         });
     }
-    getOne(username) {
+
+    insert(ticket) {
         var connection = this.db.getConnection();
         return new Promise(function (resolve, reject) {
 
             connection.connect();
 
-            connection.query("select * from users where username = ?",username ,
+            connection.query("insert into tickets(title,assignedTo,content,creator,status) values(?, ?, ?, ?, ?)", ticket,
+
+                function (error, results) {
+                    if (error) {
+                        console.log(error);
+                    }
+                    connection.end();
+
+                    resolve(results);
+                });
+
+        });
+
+    }
+
+    update(ticket) {
+        var connection = this.db.getConnection();
+        return new Promise(function (resolve, reject) {
+
+            connection.connect();
+
+            connection.query("update tickets set title=?, assignedTo = ?, content=?, status=? where id = ?", ticket,
 
                 function (error, results) {
                     if (error) {
@@ -129,6 +87,28 @@ module.exports = class users {
 
         });
     }
+
+    delete(id) {
+        var connection = this.db.getConnection();
+        return new Promise(function (resolve, reject) {
+
+            connection.connect();
+
+            connection.query("update tickets set archived=1  where id = ?", id,
+
+                function (error, results) {
+                    if (error) {
+                        console.log(error);
+                    }
+                    connection.end();
+
+                    resolve(results);
+                });
+
+        });
+    }
+
+
 
 
 }

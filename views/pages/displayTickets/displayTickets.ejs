@@ -1,0 +1,55 @@
+<% include ../../partials/header %>
+<% include ../../partials/menu %>
+
+
+<% if(user.activated==0){ %>
+
+<div> Please confirm your account through link we sent you on your email. </div>
+
+<%} else{%>
+<% include ../../partials/options %>
+<table class="table mt-5">
+    <thead>
+        <tr>
+            <th scope="col">Title</th>
+
+            <th scope="col">Creator</th>
+            <th scope="col">Status</th>
+            <th scope="col">Assigned To</th>
+            <th scope="col">Edit</th>
+            <th>Delete (Only the ones you created)</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        <% tickets.forEach(function(ticket) { %>
+        <tr>
+            <td>
+                <%= ticket.title %> %>
+            </td>
+            <td>
+                <%= ticket.creator %> %>
+            </td>
+            <td>
+                <%= ticket.status %> %>
+            </td>
+            <td>
+                <%= ticket.assignedTo %> %>
+            </td>
+            <td>
+                <a href="/tickets/edit/<%= ticket.id %> %>"><i class="far fa-edit"></i> </a>
+            </td>
+
+            <td>
+                <% if(ticket.creator == user.username){ %>
+                <a href="/tickets/delete/<%= ticket.id %> %>"> <i class="fa fa-trash" aria-hidden="true"></i></a>
+                <% } %>
+            </td>
+
+        </tr>
+        <% }); %>
+    </tbody>
+</table>
+
+<% }%>
+<% include ../../partials/footer %>
