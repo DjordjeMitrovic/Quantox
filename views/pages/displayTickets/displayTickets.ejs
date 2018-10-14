@@ -32,7 +32,7 @@
 
             <% } %>
 
-
+            <th scope="col">Display Edit History</th>
         </tr>
     </thead>
     <tbody>
@@ -73,7 +73,10 @@
             <td scope="col"><a href="/tickets/deleteHard/<%= ticket.id %>"> <i class="fas fa-times"></i></a></td>
 
             <% } %>
-
+            <td>
+                    <a href="/tickets/displayActivity/<%= ticket.id %>"><i class="fa fa-history" aria-hidden="true"></i>
+                    </a>
+                </td>
         </tr>
         <% }); %>
     </tbody>

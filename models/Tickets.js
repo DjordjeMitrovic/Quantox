@@ -76,7 +76,7 @@ module.exports = class tickets {
 
     }
 
-    update(ticket, role) {
+    update(ticket, role, userId, ticketId, newTicket) {
         var connection = this.db.getConnection();
         return new Promise(function (resolve, reject) {
             var sql;
@@ -87,17 +87,45 @@ module.exports = class tickets {
                 sql = "update tickets set title=?, assignedTo = ?, content=?, status=? where id = ?";
             }
             connection.connect();
+            connection.query("select * from tickets where id = ?", ticketId, function (error, ticketResults) {
+                if (error) {
+                    console.log(error);
+                }
+                var oldTicket = ticketResults[0];
 
-            connection.query(sql, ticket,
+                var operation = "No Changes";
 
-                function (error, results) {
+                if (!(oldTicket.title == newTicket.title && oldTicket.assignedTo == newTicket.assignedTo &&
+                        oldTicket.content == newTicket.content)) {
+                    if (operation == "No Changes") operation = "";
+                    operation += "Property Changes";
+                }
+                if (oldTicket.status != newTicket.status) {
+                    if (operation == "No Changes") operation = "";
+                    else if (operation == "Property Changes") operation += ","
+                    operation += " Status Changes "
+                }
+                connection.query("insert into activity(user, ticket, activity) values(?,?,?)", [userId, ticketId, operation], function (error, activityResults) {
                     if (error) {
                         console.log(error);
                     }
-                    connection.end();
+                    connection.query(sql, ticket,
 
-                    resolve(results);
+                        function (error, results) {
+                            if (error) {
+                                console.log(error);
+                            }
+                            connection.end();
+
+                            resolve(results);
+                        });
+
                 });
+
+
+
+            });
+
 
         });
     }
@@ -129,6 +157,26 @@ module.exports = class tickets {
             connection.connect();
 
             connection.query("delete from tickets where id = ?", id,
+
+                function (error, results) {
+                    if (error) {
+                        console.log(error);
+                    }
+                    connection.end();
+
+                    resolve(results);
+                });
+
+        });
+    }
+
+    getActivity(id) {
+        var connection = this.db.getConnection();
+        return new Promise(function (resolve, reject) {
+
+            connection.connect();
+
+            connection.query("select t.title, u.username, a.activity from activity a join users u on u.id = a.user join tickets t on t.id = a.ticket where t.id=?", id,
 
                 function (error, results) {
                     if (error) {

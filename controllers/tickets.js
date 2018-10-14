@@ -95,12 +95,26 @@ router.post("/edit", function (req, res) {
 
 
     ];
+    var ticketObject = {
+
+        title: req.body.title,
+        assignedTo: req.body.assignedTo == 'null' ? null : req.body.assignedTo,
+        content: req.body.content,
+        status: req.body.status == 'null' ? null : req.body.status,
+        id: req.body.ticket
+
+
+
+
+
+    }
+
     if (req.session.user.role == "admin") {
         ticketInfo.push(req.body.archived);
     }
     ticketInfo.push(req.body.ticket);
 
-    tickets.update(ticketInfo, req.session.user.role).then(function (result) {
+    tickets.update(ticketInfo, req.session.user.role, req.session.user.id, req.body.ticket, ticketObject).then(function (result) {
         res.redirect("/tickets/display");
     });
 
@@ -146,5 +160,15 @@ router.get("/deleteHard/:id/", function (req, res) {
 
 
 );
+router.get("/displayActivity/:id", function (req, res) {
+    tickets.getActivity(req.params.id).then(function (result) {
+        res.render("pages/displayActivity/displayActivity.ejs", {
+            user: req.session.user,
+            activities: result
 
+
+        });
+    });
+
+});
 module.exports = router;
