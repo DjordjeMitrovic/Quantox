@@ -65,7 +65,7 @@ router.get("/edit/:id", function (req, res) {
         users.getAll().then(function (userResults) {
 
             status.getAll().then(function (statusesResult) {
-                console.log(ticketResult);
+                
                
                 res.render("pages/addTickets/addTickets.ejs", {
                     user: req.session.user,

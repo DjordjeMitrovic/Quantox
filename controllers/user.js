@@ -58,7 +58,7 @@ router.post("/register", function (req, res) {
             code: 400,
             success: false,
             message: "Passwords do not match.",
-            user: user
+            user: userinfo
         });
     } else {
         user.checkIfUnique(req.body.username, req.body.email).then(function (result) {
