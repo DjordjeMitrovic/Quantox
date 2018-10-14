@@ -79,9 +79,9 @@ router.post("/register", function (req, res) {
                         from: 'plantechHF@gmail.com',
                         to: userinfo["email"],
                         subject: 'Authentification',
-                        text: "http://localhost:3000/user/auth/" + userinfo["username"]
+                        text: "http://" + req.get('host') + "/user/auth/" + userinfo["username"]
                     }
-                    
+
                     smtpTransport.sendMail(mailOptions, function (error, response) {
                         console.log(error);
 
@@ -104,11 +104,27 @@ router.post("/register", function (req, res) {
 
 router.get("/auth/:username", function (req, res) {
     user.auth(req.params.username).then(function (result) {
-       user.getOne(req.params.username).then(function(updatedUser){
-        req.session.user= updatedUser[0];
+        user.getOne(req.params.username).then(function (updatedUser) {
+            req.session.user = updatedUser[0];
+            res.redirect("/login");
+        });
+
+    });
+
+});
+
+router.get("/displayAll", function (req, res) {
+    if (req.session.user.role != "admin") {
         res.redirect("/login");
-       });
-       
+    }
+
+    user.getAll().then(function (results) {
+        res.render("pages/displayUsers/displayUsers.ejs", {
+            users: results,
+            user: req.session.user
+
+        });
+
     });
 
 });

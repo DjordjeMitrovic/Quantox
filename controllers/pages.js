@@ -25,16 +25,21 @@ router.get("/login", function (req, res) {
     }
 });
 router.get("/register", function (req, res) {
-    var userinfo = [];
-    userinfo["firstName"] = "";
-    userinfo["lastName"] = "";
-    userinfo["username"] = "";
-    userinfo["password"] = "";
-    userinfo["email"] = "";
-    res.render('pages/register/register.ejs', {
-        user: userinfo,
-        root: appDir
-    });
+
+    if (!req.session.user) {
+        var userinfo = [];
+        userinfo["firstName"] = "";
+        userinfo["lastName"] = "";
+        userinfo["username"] = "";
+        userinfo["password"] = "";
+        userinfo["email"] = "";
+        res.render('pages/register/register.ejs', {
+            user: userinfo,
+            root: appDir
+        });
+    } else {
+        res.redirect("/");
+    }
 });
 
 module.exports = router;

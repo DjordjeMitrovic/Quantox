@@ -1,0 +1,26 @@
+<% include ../../partials/header %>
+<% include ../../partials/menu %>
+
+
+<% if(user.activated==0){ %>
+
+<div> Please confirm your account through link we sent you on your email. </div>
+
+<%} else{%>
+<% include ../../partials/options %>
+<%= users %>
+<table class="table mt-5">
+    <thead>
+        <tr>
+           
+
+
+        </tr>
+    </thead>
+    <tbody>
+      
+    </tbody>
+</table>
+
+<% }%>
+<% include ../../partials/footer %>

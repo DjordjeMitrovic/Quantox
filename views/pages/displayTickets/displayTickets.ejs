@@ -12,12 +12,26 @@
     <thead>
         <tr>
             <th scope="col">Title</th>
-
+            <th scope="col">Content</th>
             <th scope="col">Creator</th>
-            <th scope="col">Status</th>
+
             <th scope="col">Assigned To</th>
+            <th scope="col">Status</th>
+            <% if(user.role=="admin"){%>
+
+            <th scope="col">Archived</th>
+
+            <% } %>
             <th scope="col">Edit</th>
-            <th>Delete (Only the ones you created)</th>
+            <th>Delete
+                <%= user.role=="user" ? "(Only the ones you created)" : "" %>
+            </th>
+            <% if(user.role=="admin"){%>
+
+            <th scope="col">Hard Delete</th>
+
+            <% } %>
+
 
         </tr>
     </thead>
@@ -28,23 +42,37 @@
                 <%= ticket.title %> %>
             </td>
             <td>
-                <%= ticket.creator %> %>
+                <%= ticket.content %> %>
             </td>
             <td>
-                <%= ticket.status %> %>
+                <%= ticket.creator %> %>
             </td>
             <td>
                 <%= ticket.assignedTo %> %>
             </td>
             <td>
+                <%= ticket.status %> %>
+            </td>
+            <% if(user.role=="admin"){%>
+
+                <th scope="col"><%=ticket.archived==1 ? "yes" : "no" %></th>
+
+            <% } %>
+
+            <td>
                 <a href="/tickets/edit/<%= ticket.id %> %>"><i class="far fa-edit"></i> </a>
             </td>
 
             <td>
-                <% if(ticket.creator == user.username){ %>
-                <a href="/tickets/delete/<%= ticket.id %> %>"> <i class="fa fa-trash" aria-hidden="true"></i></a>
+                <% if(ticket.creator == user.username || user.role=="admin"){ %>
+                <a href="/tickets/delete/<%= ticket.id %>"> <i class="fa fa-trash" aria-hidden="true"></i></a>
                 <% } %>
             </td>
+            <% if(user.role=="admin"){%>
+
+            <td scope="col"><a href="/tickets/deleteHard/<%= ticket.id %> %>"> <i class="fas fa-times"></i></a></td>
+
+            <% } %>
 
         </tr>
         <% }); %>

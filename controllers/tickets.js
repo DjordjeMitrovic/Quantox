@@ -12,7 +12,7 @@ var users = new usersModel();
 
 router.get("/display", function (req, res) {
 
-    tickets.getAll().then(function (result) {
+    tickets.getAll(req.session.user.role).then(function (result) {
         res.render("pages/displayTickets/displayTickets.ejs", {
             user: req.session.user,
             tickets: result
@@ -62,7 +62,7 @@ router.post("/add", function (req, res) {
 
 router.get("/edit/:id", function (req, res) {
 
-    tickets.getOne(req.params.id).then(function (ticketResult) {
+    tickets.getOne(req.params.id, req.session.user.role).then(function (ticketResult) {
         users.getAll().then(function (userResults) {
 
             status.getAll().then(function (statusesResult) {
@@ -92,24 +92,59 @@ router.post("/edit", function (req, res) {
         req.body.status == 'null' ? null : req.body.status,
 
 
-        req.body.ticket
+
 
     ];
+    if (req.session.user.role == "admin") {
+        ticketInfo.push(req.body.archived);
+    }
+    ticketInfo.push(req.body.ticket);
 
-    tickets.update(ticketInfo).then(function (result) {
+    tickets.update(ticketInfo, req.session.user.role).then(function (result) {
         res.redirect("/tickets/display");
     });
 
 });
 
 
-router.get("/delete/:id", function (req, res) {
+router.get("/delete/:id/", function (req, res) {
 
-    tickets.delete(req.params.id).then(function (ticketResult) {
-        res.redirect("/tickets/display");
-    });
+    if (req.session.user && req.session.user.role == "admin") {
+        tickets.delete(req.params.id).then(function (ticketResult) {
+            res.redirect("/tickets/display");
+        });
+    } else if (req.session.user) {
+        tickets.getOne(req.params.id, req.session.user.role).then(function (result) {
+            if (result[0].creator == req.session.user.id) {
+                tickets.delete(req.params.id).then(function (ticketResult) {
+                    res.redirect("/tickets/display");
+                });
+            } else {
+                res.redirect("/tickets/display");
+            }
+        });
+
+
+    }
+
 
 });
+router.get("/deleteHard/:id/", function (req, res) {
 
+        if (req.session.user && req.session.user.role == "admin") {
+            tickets.deleteHard(req.params.id).then(function (ticketResult) {
+                res.redirect("/tickets/display");
+            });
+        } else {
+            res.redirect("/tickets/display");
+        }
+    }
+
+
+
+
+
+
+);
 
 module.exports = router;

@@ -7,13 +7,18 @@ module.exports = class tickets {
         this.db = new dataBase();
 
     }
-    getOne(id) {
+    getOne(id, role) {
         var connection = this.db.getConnection();
         return new Promise(function (resolve, reject) {
-
+            var sql;
+            if (role == "admin") {
+                sql = "select * from tickets where id = ?";
+            } else {
+                sql = "select * from tickets where id = ? and archived = 0";
+            }
             connection.connect();
 
-            connection.query("select * from tickets where id = ? and archived=0", id,
+            connection.query(sql, id,
 
                 function (error, results) {
                     if (error) {
@@ -27,22 +32,25 @@ module.exports = class tickets {
         });
     }
 
-    getAll() {
+    getAll(role) {
         var connection = this.db.getConnection();
         return new Promise(function (resolve, reject) {
-
+            var sql;
+            if (role != "admin") {
+                sql = "(select t.id,u2.username as 'assignedTo', title,content,u.username as 'creator', s.name as 'status' from tickets t left join status s on t.status=s.id left join users u on u.id=t.creator left join users u2 on u2.id = t.assignedTo where t.archived=0)";
+            } else {
+                sql = "(select t.id,t.archived, u2.username as 'assignedTo', title,content,u.username as 'creator', s.name as 'status' from tickets t left join status s on t.status=s.id left join users u on u.id=t.creator left join users u2 on u2.id = t.assignedTo)"
+            }
             connection.connect();
 
-            connection.query("(select t.id,u2.username as 'assignedTo', title,content,u.username as 'creator', s.name as 'status' from tickets t left join status s on t.status=s.id left join users u on u.id=t.creator left join users u2 on u2.id = t.assignedTo where t.archived=0) ",
+            connection.query(sql, function (error, results) {
+                if (error) {
+                    console.log(error);
+                }
+                connection.end();
 
-                function (error, results) {
-                    if (error) {
-                        console.log(error);
-                    }
-                    connection.end();
-
-                    resolve(results);
-                });
+                resolve(results);
+            });
 
         });
     }
@@ -68,13 +76,19 @@ module.exports = class tickets {
 
     }
 
-    update(ticket) {
+    update(ticket, role) {
         var connection = this.db.getConnection();
         return new Promise(function (resolve, reject) {
+            var sql;
 
+            if (role == "admin") {
+                sql = "update tickets set title=?, assignedTo = ?, content=?, status=?, archived=? where id = ?"
+            } else {
+                sql = "update tickets set title=?, assignedTo = ?, content=?, status=? where id = ?";
+            }
             connection.connect();
 
-            connection.query("update tickets set title=?, assignedTo = ?, content=?, status=? where id = ?", ticket,
+            connection.query(sql, ticket,
 
                 function (error, results) {
                     if (error) {
@@ -95,6 +109,26 @@ module.exports = class tickets {
             connection.connect();
 
             connection.query("update tickets set archived=1  where id = ?", id,
+
+                function (error, results) {
+                    if (error) {
+                        console.log(error);
+                    }
+                    connection.end();
+
+                    resolve(results);
+                });
+
+        });
+    }
+
+    deleteHard(id) {
+        var connection = this.db.getConnection();
+        return new Promise(function (resolve, reject) {
+
+            connection.connect();
+
+            connection.query("delete from tickets where id = ?", id,
 
                 function (error, results) {
                     if (error) {

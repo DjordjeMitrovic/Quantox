@@ -15,7 +15,7 @@ module.exports = class users {
 
             connection.connect();
 
-            connection.query("select * from users where username = ? and password=?",
+            connection.query("select users.*,roles.name as 'role' from users join roles on users.role=roles.id where username = ? and password=?",
                 [username, sha1(password)],
                 function (error, results) {
                     connection.end();
@@ -52,7 +52,7 @@ module.exports = class users {
 
             connection.connect();
 
-            connection.query("insert into users(firstName,lastName,username,password,email) values(?, ?, ?, ?, ?)", user,
+            connection.query("insert into users(firstName,lastName,username,password,email, role) values(?, ?, ?, ?, ?)", user,
 
                 function (error, results) {
                     if (error) {
@@ -116,7 +116,7 @@ module.exports = class users {
 
             connection.connect();
 
-            connection.query("select * from users where username = ?",username ,
+            connection.query("select users.*, role.name as 'role' from users join roles on users.role=role.id where username = ?",username ,
 
                 function (error, results) {
                     if (error) {
