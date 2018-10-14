@@ -44,7 +44,9 @@ const user = require('./controllers/user');
 const tickets = require('./controllers/tickets');
 
 const pages = require('./controllers/pages');
+const status = require('./controllers/status');
 
 app.use('/', pages);
 app.use("/user", user);
 app.use("/tickets", tickets);
+app.use("/status", status);

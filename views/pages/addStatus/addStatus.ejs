@@ -1,0 +1,35 @@
+<% include ../../partials/header %>
+<% include ../../partials/menu %>
+<% include ../../partials/options %>
+
+<div class="container">
+    <div class='row'>
+        <div class='col-md-3'></div>
+        <div class='col-md-6'>
+
+            <form method="POST" action="<%= typeof update != 'undefined'? '/status/edit' : '/status/add' %>">
+                <div class="form-group row">
+                    <label for="name" class="col-sm-3 col-form-label">Name</label>
+                    <div class="col-sm-9">
+                        <input required="true" value="<%= typeof statusInfo != 'undefined'? statusInfo.name : '' %>"
+                            type="text" class="form-control" id="name" name="name" placeholder="Name">
+                    </div>
+                </div>
+                <% if(typeof update != 'undefined') { %>
+                <div class="form-group row">
+
+                    <div class="col-sm-9">
+                        <input value="<%=statusInfo.id %>" type="hidden" class="form-control" id="id" name="id">
+                    </div>
+                </div>
+                <% }%>
+
+                <input type="submit" value="Submit" class="btn btn-success">
+            </form>
+
+        </div>
+        <div class='col-md-3'></div>
+    </div>
+</div>
+
+<% include ../../partials/footer %>

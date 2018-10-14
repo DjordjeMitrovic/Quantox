@@ -8,17 +8,51 @@
 
 <%} else{%>
 <% include ../../partials/options %>
-<%= users %>
+
 <table class="table mt-5">
     <thead>
         <tr>
-           
 
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Email</th>
+            <th>Activated</th>
+            <th>Role</th>
+          
+            <th>Remove</th>
+            <th>Activate</th>
 
         </tr>
     </thead>
     <tbody>
-      
+        <% users.forEach(function(item) { %>
+        <tr>
+            <td>
+                <%=item.firstName%>
+            </td>
+            <td>
+                <%=item.lastName%>
+            </td>
+            <td>
+                <%=item.email%>
+            </td>
+            <td>
+                <%=item.activated==1? "yes" : "no"%>
+            </td>
+            <td>
+                <%=item.role%>
+            </td>
+           
+            <td><a href="/user/delete/<%=item.id%>"><i class="fa fa-trash" aria-hidden="true"></a></td>
+
+            <td>
+              <% if(item.activated==0) { %> <a href="/user/activate/<%=item.username%>"><i class='fas fa-check-circle'></i></a><%}%>
+                       
+                      
+            </td>
+
+        </tr>
+        <% }); %>
     </tbody>
 </table>
 

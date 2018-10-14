@@ -39,19 +39,19 @@
         <% tickets.forEach(function(ticket) { %>
         <tr>
             <td>
-                <%= ticket.title %> %>
+                <%= ticket.title %> 
             </td>
             <td>
-                <%= ticket.content %> %>
+                <%= ticket.content %> 
             </td>
             <td>
-                <%= ticket.creator %> %>
+                <%= ticket.creator %> 
             </td>
             <td>
-                <%= ticket.assignedTo %> %>
+                <%= ticket.assignedTo %> 
             </td>
             <td>
-                <%= ticket.status %> %>
+                <%= ticket.status %> 
             </td>
             <% if(user.role=="admin"){%>
 
@@ -60,7 +60,7 @@
             <% } %>
 
             <td>
-                <a href="/tickets/edit/<%= ticket.id %> %>"><i class="far fa-edit"></i> </a>
+                <a href="/tickets/edit/<%= ticket.id %>"><i class="far fa-edit"></i> </a>
             </td>
 
             <td>
@@ -70,7 +70,7 @@
             </td>
             <% if(user.role=="admin"){%>
 
-            <td scope="col"><a href="/tickets/deleteHard/<%= ticket.id %> %>"> <i class="fas fa-times"></i></a></td>
+            <td scope="col"><a href="/tickets/deleteHard/<%= ticket.id %>"> <i class="fas fa-times"></i></a></td>
 
             <% } %>
 

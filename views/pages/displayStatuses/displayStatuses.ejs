@@ -1,0 +1,47 @@
+<% include ../../partials/header %>
+<% include ../../partials/menu %>
+
+
+<% if(user.activated==0){ %>
+
+<div> Please confirm your account through link we sent you on your email. </div>
+
+<%} else{%>
+<% include ../../partials/options %>
+
+<table class="table mt-5">
+    <thead>
+        <tr>
+
+            <th>Name</th>
+
+            <th>Edit</th>
+            <th>Remove</th>
+
+
+        </tr>
+    </thead>
+    <tbody>
+        <% statuses.forEach(function(item) { %>
+        <tr>
+            <td>
+                <%=item.name%>
+            </td>
+
+            <td>
+                <a href="/status/edit/<%= item.id %>"><i class="far fa-edit"></i> </a>
+
+
+
+            </td>
+            <td><a href="/status/delete/<%=item.id%>"><i class="fa fa-trash" aria-hidden="true"></a></td>
+
+
+
+        </tr>
+        <% }); %>
+    </tbody>
+</table>
+
+<% }%>
+<% include ../../partials/footer %>

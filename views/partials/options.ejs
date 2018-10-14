@@ -2,7 +2,7 @@
   <div class="row">
     <div class="col-md-4">
       <form method="GET" action="/tickets/display/">
-        <button type="submit" class="btn btn-dark btn-block ">View All Tickets</button>
+        <button type="submit" class="btn btn-dark btn-block ">Manage Tickets</button>
       </form>
     </div>
     <div class="col-md-4">
@@ -10,22 +10,34 @@
         <button type="submit" class="btn btn-dark btn-block ">Add Ticket</button>
       </form>
     </div>
-  </div>
-  <% 
-if(typeof user != "undefined" && user.role=="admin"){
-%>
-  <div class="row mt-5">
+
+    <%if(typeof user != "undefined" && user.role=="admin"){
+    %>
+
     <div class="col-md-4">
       <form method="GET" action="/user/displayAll/">
         <button type="submit" class="btn btn-dark btn-block ">Manage Users</button>
       </form>
     </div>
 
+    <% } %>
+  </div>
+  <% 
+if(typeof user != "undefined" && user.role=="admin"){
+%>
+  <div class="row mt-5">
+
+
 
 
     <div class="col-md-4">
-      <form method="GET" action="/tickets/add/">
+      <form method="GET" action="/status/displayStatuses/">
         <button type="submit" class="btn btn-dark btn-block ">Manage Statuses</button>
+      </form>
+    </div>
+    <div class="col-md-4">
+      <form method="GET" action="/status/add/">
+        <button type="submit" class="btn btn-dark btn-block ">Add Status</button>
       </form>
     </div>
   </div>

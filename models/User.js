@@ -82,7 +82,7 @@ module.exports = class users {
                         console.log(error);
                     }
                     connection.end();
-                  
+
                     resolve(results);
                 });
 
@@ -97,7 +97,7 @@ module.exports = class users {
 
             connection.connect();
 
-            connection.query("select * from users",
+            connection.query("select users.*, roles.id as 'roleid', roles.name as 'role' from users join roles on users.role=roles.id",
 
                 function (error, results) {
                     if (error) {
@@ -116,7 +116,27 @@ module.exports = class users {
 
             connection.connect();
 
-            connection.query("select users.*, role.name as 'role' from users join roles on users.role=role.id where username = ?",username ,
+            connection.query("select users.*, roles.name as 'role' from users join roles on users.role=roles.id where username = ?", username,
+
+                function (error, results) {
+                    if (error) {
+                        console.log(error);
+                    }
+                    connection.end();
+
+                    resolve(results);
+                });
+
+        });
+    }
+
+    delete(id) {
+        var connection = this.db.getConnection();
+        return new Promise(function (resolve, reject) {
+
+            connection.connect();
+
+            connection.query("delete from users where id = ?", id,
 
                 function (error, results) {
                     if (error) {

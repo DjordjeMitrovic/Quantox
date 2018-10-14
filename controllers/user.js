@@ -113,6 +113,19 @@ router.get("/auth/:username", function (req, res) {
 
 });
 
+router.get("/activate/:username", function (req, res) {
+    if (!req.session.user || req.session.user.role != "admin") {
+        res.redirect("/login");
+    } else {
+        user.auth(req.params.username).then(function (result) {
+            res.redirect("/user/displayAll");
+
+        });
+    }
+
+
+});
+
 router.get("/displayAll", function (req, res) {
     if (req.session.user.role != "admin") {
         res.redirect("/login");
@@ -124,6 +137,18 @@ router.get("/displayAll", function (req, res) {
             user: req.session.user
 
         });
+
+    });
+
+});
+
+router.get("/delete/:id", function (req, res) {
+    if (req.session.user.role != "admin") {
+        res.redirect("/login");
+    }
+
+    user.delete(req.params.id).then(function (results) {
+        res.redirect("/user/displayAll");
 
     });
 
