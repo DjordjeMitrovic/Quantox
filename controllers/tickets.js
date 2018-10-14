@@ -9,7 +9,6 @@ var tickets = new ticketModel();
 var status = new statusModel();
 var users = new usersModel();
 
-
 router.get("/display", function (req, res) {
 
     tickets.getAll(req.session.user.role).then(function (result) {
@@ -67,6 +66,7 @@ router.get("/edit/:id", function (req, res) {
 
             status.getAll().then(function (statusesResult) {
                 console.log(ticketResult);
+               
                 res.render("pages/addTickets/addTickets.ejs", {
                     user: req.session.user,
                     statuses: statusesResult,

@@ -15,9 +15,12 @@
     "ejs": "^2.6.1",
     "express": "^4.16.4",
     "express-session": "^1.15.6",
+    "http": "0.0.0",
     "node-mysql": "^0.4.2",
     "node-sha1": "^1.0.1",
     "nodemailer": "^4.6.8",
-    "sha1": "^1.1.1"
+    "sha1": "^1.1.1",
+    "socket-io": "^1.0.0",
+    "socket.io": "^2.1.1"
   }
 }

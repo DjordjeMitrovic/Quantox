@@ -12,7 +12,9 @@ router.get("/add", function (req, res) {
     if (!req.session.user || req.session.user.role != "admin") {
         res.redirect("/login");
     } else {
-        res.render("pages/addStatus/addStatus.ejs");
+        res.render("pages/addStatus/addStatus.ejs",{
+            user: req.session.user
+        });
     }
 
 });

@@ -52,7 +52,7 @@ module.exports = class users {
 
             connection.connect();
 
-            connection.query("insert into users(firstName,lastName,username,password,email, role) values(?, ?, ?, ?, ?)", user,
+            connection.query("insert into users(firstName,lastName,username,password,email) values(?, ?, ?, ?, ?)", user,
 
                 function (error, results) {
                     if (error) {

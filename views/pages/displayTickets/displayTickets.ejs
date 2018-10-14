@@ -8,6 +8,7 @@
 
 <%} else{%>
 <% include ../../partials/options %>
+
 <table class="table mt-5">
     <thead>
         <tr>
@@ -39,23 +40,25 @@
         <% tickets.forEach(function(ticket) { %>
         <tr>
             <td>
-                <%= ticket.title %> 
+                <%= ticket.title %>
             </td>
             <td>
-                <%= ticket.content %> 
+                <%= ticket.content %>
             </td>
             <td>
-                <%= ticket.creator %> 
+                <%= ticket.creator %>
             </td>
             <td>
-                <%= ticket.assignedTo %> 
+                <%= ticket.assignedTo %>
             </td>
             <td>
-                <%= ticket.status %> 
+                <%= ticket.status %>
             </td>
             <% if(user.role=="admin"){%>
 
-                <th scope="col"><%=ticket.archived==1 ? "yes" : "no" %></th>
+            <th scope="col">
+                <%=ticket.archived==1 ? "yes" : "no" %>
+            </th>
 
             <% } %>
 
@@ -74,9 +77,9 @@
 
             <% } %>
             <td>
-                    <a href="/tickets/displayActivity/<%= ticket.id %>"><i class="fa fa-history" aria-hidden="true"></i>
-                    </a>
-                </td>
+                <a href="/tickets/displayActivity/<%= ticket.id %>"><i class="fa fa-history" aria-hidden="true"></i>
+                </a>
+            </td>
         </tr>
         <% }); %>
     </tbody>
