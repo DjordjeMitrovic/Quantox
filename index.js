@@ -5,7 +5,7 @@ const session = require('cookie-session')
 const path = require('path');
 const bodyParser = require("body-parser");
 
-const port = process.env.PORT | 5000;
+const port = process.env.PORT || 5000;
 const appDir = path.dirname(require.main.filename);
 
 app.use(bodyParser.urlencoded({
