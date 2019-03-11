@@ -5,7 +5,7 @@ const session = require('cookie-session')
 const path = require('path');
 const bodyParser = require("body-parser");
 
-const port = 5000;
+const port = process.env.PORT | 5000;
 const appDir = path.dirname(require.main.filename);
 
 app.use(bodyParser.urlencoded({
@@ -36,7 +36,7 @@ app.use(function (req, res, next) {
 
 app.set('view engine', 'ejs');
 
-app.listen(process.env.PORT | port, function () {
+app.listen(port, function () {
     console.log("Server is running on port " + port);
 });
 
