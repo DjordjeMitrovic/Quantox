@@ -1,8 +1,8 @@
 var settings = {
-    host: "localhost",
-    user: "root",
-    password: "root",
-    database: "quantox"
+    host: "db4free.net",
+    user: "quantoxtest",
+    password: "quantoxtest",
+    database: "quantoxtest"
 }
 
 module.exports = settings;

@@ -22,5 +22,11 @@
     "sha1": "^1.1.1",
     "socket-io": "^1.0.0",
     "socket.io": "^2.1.1"
+  },
+    "engines": {
+    "node": "10.13.0"
+  },
+   "scripts": {
+    "start": "node index.js"
   }
 }
